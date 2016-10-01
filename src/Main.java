@@ -1,13 +1,13 @@
 import MG2D.*;
 import MG2D.geometrie.*;
-import java.awt.Color;
+
 
 public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Fenetre f = new Fenetre("f", 640, 480);
+		Fenetre f = new Fenetre("Shoot'em Up", 640, 480);
 		Clavier clavier = new Clavier();
 		Souris souris = new Souris(480);
 		f.addKeyListener(clavier);
@@ -15,7 +15,8 @@ public class Main {
 		f.getP().addMouseListener(souris);
 		f.getP().addMouseMotionListener(souris);
 		f.addMouseMotionListener(souris);
-		Texture vaisseau = new Texture ("./img/vaisseau.png",new Point(40,40),49,85);
+		
+		Vaisseau vaisseau = new Vaisseau ("./img/vaisseau.png",new Point(40,40),49,85);
 		f.ajouter(vaisseau);
 
 		while (true) {
