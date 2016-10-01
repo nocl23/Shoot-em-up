@@ -15,8 +15,8 @@ public class Main {
 		f.getP().addMouseListener(souris);
 		f.getP().addMouseMotionListener(souris);
 		f.addMouseMotionListener(souris);
-		Rectangle r = new Rectangle(Couleur.BLEU, new Point(40, 0), 50, 70, true);
-		f.ajouter(r);
+		Texture vaisseau = new Texture ("./img/vaisseau.png",new Point(40,40),49,85);
+		f.ajouter(vaisseau);
 
 		while (true) {
 			try {
@@ -26,23 +26,27 @@ public class Main {
 				System.out.println(e.getMessage());
 			}
 
-			if (clavier.getDroite() && r.getB().getX() < 640) {
-				r.translater(5, 0);
-			} else if (clavier.getGauche() && r.getA().getX() > 0) {
-				r.translater(-5, 0);
-			}
+			if (clavier.getDroite() && vaisseau.getB().getX() < 635) {
+				vaisseau.translater(5, 0);
+			} else if (clavier.getGauche() && vaisseau.getA().getX() > 0) {
+				vaisseau.translater(-5, 0);
+			} else if (clavier.getHaut() && vaisseau.getA().getY() < 395){
+				vaisseau.translater(0, 5);
+			} else if (clavier.getBas() && vaisseau.getB().getY() > vaisseau.getHauteur()){
+				vaisseau.translater(0, -5);
+			} 
 
-			if (souris.getClicGauche()) {
-				// System.out.println(souris.getPosition());
-				if (r.intersection(souris.getPosition())) {
+			/*if (souris.getClicGauche()) {
+				
+				if (vaisseau.intersection(souris.getPosition())) {
 
 					System.out.println("Rectangle");
-					r.setCouleur(Couleur.JAUNE);
+					vaisseau.setCouleur(Couleur.JAUNE);
 
 				} else {
-					r.setCouleur(Couleur.BLEU);
+					vaisseau.setCouleur(Couleur.BLEU);
 				}
-			}
+			}*/
 			
 			
 			f.rafraichir();
