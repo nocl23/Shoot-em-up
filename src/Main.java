@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import MG2D.*;
 import MG2D.geometrie.*;
 
@@ -15,8 +17,14 @@ public class Main {
 		f.getP().addMouseListener(souris);
 		f.getP().addMouseMotionListener(souris);
 		f.addMouseMotionListener(souris);
+		Rectangle fond = new Rectangle(Couleur.BLEU, new Point(0, 0), 640, 480, true);
+		Joueur vaisseau = new Joueur ("./img/vaisseau.png",new Point(295,40),49,85);
+		ArrayList<Tir> munition = new ArrayList<Tir>();
 		
-		Vaisseau vaisseau = new Vaisseau ("./img/vaisseau.png",new Point(40,40),49,85);
+		/*Besoin pour missiles illimités*/
+		int indiceMissile = 0;
+		
+		f.ajouter(fond);
 		f.ajouter(vaisseau);
 
 		while (true) {
@@ -26,7 +34,7 @@ public class Main {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
-
+			// Déplacement du vaisseau
 			if (clavier.getDroite() && vaisseau.getB().getX() < 635) {
 				vaisseau.translater(5, 0);
 			} else if (clavier.getGauche() && vaisseau.getA().getX() > 0) {
@@ -49,6 +57,17 @@ public class Main {
 				}
 			}*/
 			
+			// Tir d'un missile
+			if(clavier.getEspace()){
+				//Rectangle missile = new Rectangle(Couleur.JAUNE,new Point((vaisseau.getB().getX())-30,((vaisseau.getB().getY())) + 10),10,10,true);
+				// idée pour calcule Rectangle missile = new Rectangle(Couleur.JAUNE,new Point(((vaisseau.getA().getX()) + vaisseau.getLargeur())/2,(vaisseau.getB().getY())),10,10,true);
+				Tir missile = new Tir(Couleur.JAUNE,new Point((vaisseau.getB().getX())-30,((vaisseau.getB().getY())) + 10),10,10,true);
+				munition.add(missile);
+				f.ajouter((Dessin) munition.get(indiceMissile));
+				indiceMissile++;
+				missile.atteint(f);
+				
+			}
 			
 			f.rafraichir();
 		}
