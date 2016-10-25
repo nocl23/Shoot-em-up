@@ -1,3 +1,6 @@
+/**
+ * Classe Joueur représentant le joueur.
+ */
 import MG2D.*;
 import MG2D.geometrie.*;
 

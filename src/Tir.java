@@ -1,3 +1,7 @@
+/**
+ * Classe représentant le tir d'un missile par un Joueur.
+ */
+
 import java.awt.Graphics;
 
 import MG2D.*;
@@ -96,25 +100,26 @@ public class Tir extends Rectangle{
 		// TODO Auto-generated constructor stub
 	}
 	
+
+	
+	
+	
 	/**
 	 * Fonction qui détermine si un missile a atteint la fenetre
 	 * @param f
 	 */
 	
-	public void atteint(Fenetre f){
-		
-		while (this.getB().getY() < f.getHeight()){
+	public boolean atteint(Fenetre f){
+		int i;
+		boolean rslt = false;
+		for (i = this.getB().getY();i < f.getHeight();i=i+30){
 			System.out.println(this.getB().getY());
-			try {
-				Thread.sleep(200);
 				this.translater(0,30);
-				f.rafraichir();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+				//f.rafraichir();
+				rslt = true;
+				
 		}
+		return rslt;
 		
 	}
 
