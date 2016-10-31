@@ -28,10 +28,6 @@ public class Main {
 		f.ajouter(fond);
 		
 		
-		
-		
-		
-		
 		// Position initiale aléatoire des ennemis
 		int xEnnemi;
 		int yEnnemi = 390;
@@ -49,17 +45,13 @@ public class Main {
 
 			f.ajouter(ennemis.get(i));
 		}
-
-		
-		
-		
-		
 		
 		f.ajouter(vaisseau);
 
 		while (true) {
 			try {
 				Thread.sleep(20);
+
 
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
@@ -121,6 +113,7 @@ public class Main {
 				
 				
 			}
+
 			f.rafraichir();
 		}
 
