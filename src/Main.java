@@ -18,7 +18,7 @@ public class Main {
 		f.getP().addMouseMotionListener(souris);
 		f.addMouseMotionListener(souris);
 		Rectangle fond = new Rectangle(Couleur.BLANC, new Point(0, 0), 640, 480, true);
-		Joueur vaisseau = new Joueur("./images/vaisseau.png", new Point(295, 40), 49, 85);
+		Joueur vaisseau = new Joueur("./img/vaisseau.png", new Point(295, 40), 49, 85);
 		ArrayList<Tir> munition = new ArrayList<Tir>();
 		ArrayList<Ennemi> ennemis = new ArrayList<Ennemi>();
 		// frequence pour que le joueur ne tire pas de missiles à chaque tour de
@@ -40,7 +40,7 @@ public class Main {
 				yEnnemi = 300;
 			}
 
-			ennemis.add(new Ennemi("./images/ennemi.png", new Point(xEnnemi, yEnnemi), 116, 59));
+			ennemis.add(new Ennemi("./img/ennemi.png", new Point(xEnnemi, yEnnemi), 116, 59));
 			
 
 			f.ajouter(ennemis.get(i));
@@ -79,8 +79,7 @@ public class Main {
 				// Rectangle(Couleur.JAUNE,new Point(((vaisseau.getA().getX()) +
 				// vaisseau.getLargeur())/2,(vaisseau.getB().getY())),10,10,true);
 				if (frequence > 15) {
-					Tir missile = new Tir(Couleur.ROUGE,
-							new Point((vaisseau.getB().getX()) - 30, ((vaisseau.getB().getY())) + 10), 10, 10, true);
+					Tir missile = new Tir("./img/missile.png", new Point((vaisseau.getB().getX()) - 30, ((vaisseau.getB().getY())) + 10),21 , 34);
 					munition.add(missile);
 					f.ajouter((Dessin) munition.get(indiceMissile));
 					indiceMissile++;
