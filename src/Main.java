@@ -1,5 +1,5 @@
+import java.awt.Font;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import MG2D.*;
 import MG2D.geometrie.*;
@@ -30,6 +30,8 @@ public class Main {
 		boolean touche = false;
 		f.ajouter(fond);
 		int AllEnnemisTouche = 0;
+		Texte vieJoueur = new Texte(""+vaisseau.getVie(),new Font("tahoma",12,12),new Point(50,50));
+		f.ajouter(vieJoueur);
 
 		// Position initiale aléatoire des ennemis
 		int xEnnemi;
@@ -48,7 +50,9 @@ public class Main {
 		}
 
 		f.ajouter(vaisseau);
+		
 
+		// boucle tourne si le joueur a encore des vies et si tous les ennemis n ont pas ete touches
 		while (true && vaisseau.getVie() > 0 && AllEnnemisTouche < 8) {
 			try {
 				Thread.sleep(30);
@@ -57,7 +61,6 @@ public class Main {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
-
 			freqJoueur++;
 			freqEnnemi++;
 			
@@ -75,14 +78,8 @@ public class Main {
 			// Tir d'un missile Joueur
 			if (clavier.getEspace()) {
 
-				// Rectangle missile = new Rectangle(Couleur.JAUNE,new
-				// Point((vaisseau.getB().getX())-30,((vaisseau.getB().getY()))
-				// + 10),10,10,true);
-				// idée pour calcule Rectangle missile = new
-				// Rectangle(Couleur.JAUNE,new Point(((vaisseau.getA().getX()) +
-				// vaisseau.getLargeur())/2,(vaisseau.getB().getY())),10,10,true);
 				if (freqJoueur > 15) {
-					Tir missileJ = new Tir("./img/missileJ.png", new Point((vaisseau.getB().getX()) - 30, ((vaisseau.getB().getY())) + 10),21 , 34);
+					Tir missileJ = new Tir("./img/missileJ.png", new Point((vaisseau.getA().getX() + vaisseau.getLargeur()/2), ((vaisseau.getB().getY())) + 10),21 , 34);
 					munitionJ.add(missileJ);
 					f.ajouter((Dessin) munitionJ.get(indiceMissile));
 					indiceMissile++;
@@ -110,7 +107,7 @@ public class Main {
 				}
 			}
 				System.out.println(AllEnnemisTouche+" ennemi touche");
-
+				// Déplacement des ennemis de droite à gauche
 			for (int i = 0; i < ennemis.length; i++) {
 
 				if(ennemis[i].getB().getX() < f.getWidth()+1 && !(ennemis[i]).getParoi()){
@@ -151,16 +148,16 @@ public class Main {
 				if(munitionE.get(i).intersection(vaisseau) && !touche){
 					touche=true;
 					vaisseau.setVie(vaisseau.getVie()-1);
+					vieJoueur.setTexte(vaisseau.getVie()+"");
 					f.supprimer(munitionE.get(i));
 					munitionE.remove(munitionE.get(i));
 					System.out.println(vaisseau.getVie());
 					touche=false;
-
+					
 				}
 
 
 			}
-
 
 			f.rafraichir();
 		}
