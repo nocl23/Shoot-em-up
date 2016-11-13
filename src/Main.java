@@ -27,6 +27,7 @@ public class Main {
 		int freqJoueur = 0;
 		int indiceMissile = 0;
 		int freqEnnemi = 0;
+		boolean touche = false;
 		f.ajouter(fond);
 		
 		
@@ -58,7 +59,7 @@ public class Main {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
-
+			
 			freqJoueur++;
 			freqEnnemi++;
 			// Déplacement du vaisseau
@@ -92,10 +93,19 @@ public class Main {
 
 			}
 			// Avancement des missiles Joueur
-			for (int i = 0; i < munitionJ.size(); i++) {
-				munitionJ.get(i).translater(0, 10);
+			for (int indexMunitionJ = 0; indexMunitionJ < munitionJ.size(); indexMunitionJ++) {
+				munitionJ.get(indexMunitionJ).translater(0, 10);
+				
+			/*if(munitionJ.get(indexMunitionJ).intersection(ennemis.get(2))){
+					ennemis.remove(ennemis.get(2));
+					f.supprimer(ennemis.get(2));
+				}*/
 			}
+			//idée : Si un missile touche fusée > boolean / vie 
 			// Déplacement aléatoire des ennemis
+			
+			
+			
 			for (int i = 0; i < ennemis.size(); i++) {
 				
 				if(ennemis.get(i).getB().getX() < f.getWidth()+1 && !(ennemis.get(i)).getParoi()){
@@ -112,6 +122,7 @@ public class Main {
 				if(ennemis.get(i).getA().getX() < 0){
 					ennemis.get(i).setParoi(false);
 				}	
+			
 			}
 			
 			//Tir des ennemis
@@ -126,6 +137,20 @@ public class Main {
 			//Avancement des missiles ennemis
 			for(int i = 0; i<munitionE.size();i++){
 				munitionE.get(i).translater(0, -5);
+				
+				
+				// Collisions missiles ennemis sur Joueur
+				if(munitionE.get(i).intersection(vaisseau) && !touche){
+					touche=true;
+					vaisseau.setVie(vaisseau.getVie()-1);
+					f.supprimer(munitionE.get(i));
+					munitionE.remove(munitionE.get(i));
+					System.out.println(vaisseau.getVie());
+					touche=false;
+					
+				}
+				
+				
 			}
 			
 

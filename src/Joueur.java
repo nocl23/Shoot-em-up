@@ -6,7 +6,19 @@ import MG2D.geometrie.*;
 
 public class Joueur extends Texture {
 	
-	
+	private int vie=5;
+
+
+	public void setVie(int vie) {
+		this.vie = vie;
+	}
+
+
+	public int getVie() {
+		return vie;
+	}
+
+
 	public Joueur() {
 		super();
 		// TODO Auto-generated constructor stub
