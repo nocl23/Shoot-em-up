@@ -20,7 +20,7 @@ public class Main {
 		Rectangle fond = new Rectangle(Couleur.BLANC, new Point(0, 0), 640, 480, true);
 		Joueur vaisseau = new Joueur("./img/vaisseau.png", new Point(295, 40), 49, 85);
 		ArrayList<Tir> munitionJ = new ArrayList<Tir>();
-		ArrayList<Ennemi> ennemis = new ArrayList<Ennemi>();
+		Ennemi ennemis [] = new Ennemi[8];
 		ArrayList<Tir> munitionE = new ArrayList<Tir>();
 		// freqJoueur pour que le joueur ne tire pas de missiles à chaque tour de
 		// boucle while
@@ -29,29 +29,27 @@ public class Main {
 		int freqEnnemi = 0;
 		boolean touche = false;
 		f.ajouter(fond);
-		
-		
+		int AllEnnemisTouche = 0;
+
 		// Position initiale aléatoire des ennemis
 		int xEnnemi;
 		int yEnnemi = 390;
-		
+
 		for (int i = 0; i < 8; i++) { // creation de 8 ennemis positionnés aléatoirement en abscisse
-			
+
 			xEnnemi = (int) (Math.random()*(f.getWidth() - 116));
-			
+
 			if(i>3){      // Placement de 4 ennemis par ligne en changant l'ordonnée des 4 derniers ennemis
 				yEnnemi = 300;
 			}
 
-			ennemis.add(new Ennemi("./img/ennemi.png", new Point(xEnnemi, yEnnemi), 116, 59));
-			
-
-			f.ajouter(ennemis.get(i));
+			ennemis[i]=(new Ennemi("./img/ennemi.png", new Point(xEnnemi, yEnnemi), 116, 59));
+			f.ajouter(ennemis[i]);
 		}
-		
+
 		f.ajouter(vaisseau);
 
-		while (true) {
+		while (true && vaisseau.getVie() > 0 && AllEnnemisTouche < 8) {
 			try {
 				Thread.sleep(30);
 
@@ -59,9 +57,10 @@ public class Main {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
-			
+
 			freqJoueur++;
 			freqEnnemi++;
+			
 			// Déplacement du vaisseau
 			if (clavier.getDroite() && vaisseau.getB().getX() < f.getWidth() - 5) {
 				vaisseau.translater(5, 0);
@@ -87,58 +86,67 @@ public class Main {
 					munitionJ.add(missileJ);
 					f.ajouter((Dessin) munitionJ.get(indiceMissile));
 					indiceMissile++;
-					// missile.atteint(f);
 					freqJoueur = 0;
 				}
 
 			}
+
 			// Avancement des missiles Joueur
-			for (int indexMunitionJ = 0; indexMunitionJ < munitionJ.size(); indexMunitionJ++) {
-				munitionJ.get(indexMunitionJ).translater(0, 10);
-				
-			/*if(munitionJ.get(indexMunitionJ).intersection(ennemis.get(2))){
-					ennemis.remove(ennemis.get(2));
-					f.supprimer(ennemis.get(2));
-				}*/
-			}
-			//idée : Si un missile touche fusée > boolean / vie 
-			// Déplacement aléatoire des ennemis
 			
-			
-			
-			for (int i = 0; i < ennemis.size(); i++) {
-				
-				if(ennemis.get(i).getB().getX() < f.getWidth()+1 && !(ennemis.get(i)).getParoi()){
-					ennemis.get(i).translater(5, 0);
+				for (int indexMunitionJ = 0; indexMunitionJ < munitionJ.size(); indexMunitionJ++) {
+					for (int ennemy=0;ennemy < ennemis.length; ennemy++){
+
+					munitionJ.get(indexMunitionJ).translater(0, 2);
+
+					if(munitionJ.get(indexMunitionJ).intersection(ennemis[ennemy]) && !ennemis[ennemy].getEnnemiTouche()){
+						ennemis[ennemy].setEnnemiTouche(true);
+						System.out.println(ennemis.length);
+						f.supprimer(ennemis[ennemy]);
+						System.out.println(ennemis.length+"cc");
+						AllEnnemisTouche++;
+					}
+					
 					
 				}
-				if (ennemis.get(i).getB().getX() > f.getWidth()){
-					ennemis.get(i).setParoi(true);
-				} 
-				if(ennemis.get(i).getParoi()){
-				
-					ennemis.get(i).translater(-5,0);
-				}
-				if(ennemis.get(i).getA().getX() < 0){
-					ennemis.get(i).setParoi(false);
-				}	
-			
 			}
-			
-			//Tir des ennemis
+				System.out.println(AllEnnemisTouche+" ennemi touche");
+
+			for (int i = 0; i < ennemis.length; i++) {
+
+				if(ennemis[i].getB().getX() < f.getWidth()+1 && !(ennemis[i]).getParoi()){
+					ennemis[i].translater(5, 0);
+
+				}
+				if (ennemis[i].getB().getX() > f.getWidth()){
+					ennemis[i].setParoi(true);
+				} 
+				if(ennemis[i].getParoi()){
+
+					ennemis[i].translater(-5,0);
+				}
+				if(ennemis[i].getA().getX() < 0){
+					ennemis[i].setParoi(false);
+				}	
+
+			}
+
+			//Tir aléatoire des ennemis
 			if(freqEnnemi == 60){
 				freqEnnemi = 0;
 				int numeroVaisseau = (int) (Math.random()*7+1);
-				Tir missileE = new Tir("./img/missileE.png", 
-						new Point((ennemis.get(numeroVaisseau).getB().getX()-45), ((ennemis.get(numeroVaisseau).getB().getY()) - 100)),21 , 34);
-				munitionE.add(missileE);
-				f.ajouter(missileE);
+				if(!ennemis[numeroVaisseau].getEnnemiTouche()){
+					Tir missileE = new Tir("./img/missileE.png", 
+							new Point((ennemis[numeroVaisseau].getB().getX()-45), ((ennemis[numeroVaisseau].getB().getY()) - 100)),21 , 34);
+					munitionE.add(missileE);
+					f.ajouter(missileE);
+
+				}
 			}
 			//Avancement des missiles ennemis
 			for(int i = 0; i<munitionE.size();i++){
 				munitionE.get(i).translater(0, -5);
-				
-				
+
+
 				// Collisions missiles ennemis sur Joueur
 				if(munitionE.get(i).intersection(vaisseau) && !touche){
 					touche=true;
@@ -147,16 +155,15 @@ public class Main {
 					munitionE.remove(munitionE.get(i));
 					System.out.println(vaisseau.getVie());
 					touche=false;
-					
+
 				}
-				
-				
+
+
 			}
-			
+
 
 			f.rafraichir();
 		}
-
 	}
 
 }

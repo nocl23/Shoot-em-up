@@ -5,7 +5,16 @@ public class Ennemi extends Texture {
 	
 	// Booleen qui determine si un ennemi a touché le bord de la fenetre
 	private boolean paroi = false;
+	private boolean ennemiTouche = false;
 	
+	public boolean getEnnemiTouche() {
+		return ennemiTouche;
+	}
+
+	public void setEnnemiTouche(boolean ennemiTouche) {
+		this.ennemiTouche = ennemiTouche;
+	}
+
 	public boolean getParoi() {
 		return paroi;
 	}
@@ -43,5 +52,5 @@ public class Ennemi extends Texture {
 		super(t);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 }
