@@ -31,6 +31,7 @@ public class Main {
 		int freqEnnemi = 0;
 		int freqBonus=0;
 		boolean touche = false;
+		boolean bonusRapide = false;
 		f.ajouter(fond);
 		int AllEnnemisTouche = 0;
 		int randomennemis=(int) (Math.random()*(20)+1);
@@ -72,14 +73,22 @@ public class Main {
 			freqEnnemi++;
 			f.setAffichageFPS(true);
 			// Déplacement du vaisseau
-			if (clavier.getDroite() && vaisseau.getB().getX() < f.getWidth() - 5) {
+			if (clavier.getDroite() && vaisseau.getB().getX() < f.getWidth() - 5 && !bonusRapide) {
 				vaisseau.translater(5, 0);
-			} else if (clavier.getGauche() && vaisseau.getA().getX() > 0) {
+			}else if (clavier.getDroite() && vaisseau.getA().getX() < f.getWidth() - 5 && bonusRapide) {
+					vaisseau.translater(10, 0);	
+			}else if (clavier.getGauche() && vaisseau.getA().getX() > 0 && !bonusRapide) {
 				vaisseau.translater(-5, 0);
-			} else if (clavier.getHaut() && vaisseau.getA().getY() < f.getHeight() - 110) {
+			}else if (clavier.getGauche() && vaisseau.getA().getX() > 0 && bonusRapide) {
+					vaisseau.translater(-10, 0);
+			} else if (clavier.getHaut() && vaisseau.getB().getY() < f.getHeight()/2 && !bonusRapide) {
 				vaisseau.translater(0, 5);
-			} else if (clavier.getBas() && vaisseau.getB().getY() > vaisseau.getHauteur()) {
+			}else if (clavier.getHaut() && vaisseau.getB().getY() < f.getHeight()/2 && bonusRapide) {
+				vaisseau.translater(0, 10);
+			}else if (clavier.getBas() && vaisseau.getB().getY() > vaisseau.getHauteur() && !bonusRapide) {
 				vaisseau.translater(0, -5);
+			}else if (clavier.getBas() && vaisseau.getB().getY() > vaisseau.getHauteur() &&bonusRapide) {
+				vaisseau.translater(0, -10);
 			}
 
 			// Tir d'un missile Joueur
@@ -116,7 +125,7 @@ public class Main {
 			for (int i = 0; i < ennemis.length; i++) {
 
 				if(ennemis[i].getB().getX() < f.getWidth()+1 && !(ennemis[i]).getParoi()){
-					ennemis[i].translater(5, 0);
+					ennemis[i].translater(10, 0);
 
 				}
 				if (ennemis[i].getB().getX() > f.getWidth()){
@@ -124,7 +133,7 @@ public class Main {
 				} 
 				if(ennemis[i].getParoi()){
 
-					ennemis[i].translater(-5,0);
+					ennemis[i].translater(-10,0);
 				}
 				if(ennemis[i].getA().getX() < 0){
 					ennemis[i].setParoi(false);
@@ -164,8 +173,7 @@ public class Main {
 			}
 			
 			
-			if(freqBonus == 500){
-				freqBonus = 0;
+			if(freqBonus == 300){
 				Tir missileBonus = new Tir("./img/missileJ.png", new Point((int) (Math.random()*1000),600), 21, 34);
 				bonus.add(missileBonus);
 				f.ajouter(missileBonus);
@@ -173,13 +181,19 @@ public class Main {
 				for (int i = 0 ; i < bonus.size();i++){
 				bonus.get(i).translater(0, -5);
 				
+				if(bonus.get(i).intersection(vaisseau)){
+					bonusRapide = true;
+					System.out.println("freqBonus avant "+freqBonus);
+				}
+				if (freqBonus == 350){
+					bonusRapide = false;
+					freqBonus = 0;
+				}
+					
+					
+				
+				
 			}
-			
-			
-			
-			
-			
-			
 			
 			
 
