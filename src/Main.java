@@ -157,7 +157,6 @@ public class Main {
 					
 				}
 
-
 			}
 
 			f.rafraichir();
@@ -165,8 +164,14 @@ public class Main {
 		
 		Rectangle fondGO = new Rectangle(Couleur.NOIR, new Point(0, 0), 1000, 700, true);
 		Texte gameover = new Texte(Couleur.BLANC,"GAME OVER",new Font("tahoma",120,120) , new Point(500,300));
+		Texte ennemiLoose = new Texte(Couleur.BLANC,"YOU WIN",new Font("tahoma",120,120) , new Point(500,300));
 		f.ajouter(fondGO);
-		f.ajouter(gameover);
+		if(vaisseau.getVie()>0){
+		f.ajouter(ennemiLoose);
+		}else{
+			f.ajouter(gameover);
+		}
+		
 		
 		
 	}
