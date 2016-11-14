@@ -17,16 +17,19 @@ public class Main {
 		f.getP().addMouseListener(souris);
 		f.getP().addMouseMotionListener(souris);
 		f.addMouseMotionListener(souris);
+		
 		//valeurs amenées à changer en fonction du mode
 		Rectangle fond = new Rectangle(Couleur.BLANC, new Point(0, 0), 1000, 700, true);
 		Joueur vaisseau = new Joueur("./img/vaisseau.png", new Point(295, 40), 49, 85);
 		ArrayList<Tir> munitionJ = new ArrayList<Tir>();
 		ArrayList<Tir> munitionE = new ArrayList<Tir>();
+		ArrayList<Tir> bonus = new ArrayList<Tir>();
 		// freqJoueur pour que le joueur ne tire pas de missiles à chaque tour de
 		// boucle while
 		int freqJoueur = 0;
 		int indiceMissile = 0;
 		int freqEnnemi = 0;
+		int freqBonus=0;
 		boolean touche = false;
 		f.ajouter(fond);
 		int AllEnnemisTouche = 0;
@@ -51,7 +54,7 @@ public class Main {
 			ennemis[i]=(new Ennemi("./img/ennemi.png", new Point(xEnnemi, yEnnemi), 116, 59));
 			f.ajouter(ennemis[i]);
 		}
-
+		
 		f.ajouter(vaisseau);
 		
 
@@ -64,6 +67,7 @@ public class Main {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
+			freqBonus++;
 			freqJoueur++;
 			freqEnnemi++;
 			f.setAffichageFPS(true);
@@ -158,6 +162,26 @@ public class Main {
 				}
 
 			}
+			
+			
+			if(freqBonus == 500){
+				freqBonus = 0;
+				Tir missileBonus = new Tir("./img/missileJ.png", new Point((int) (Math.random()*1000),600), 21, 34);
+				bonus.add(missileBonus);
+				f.ajouter(missileBonus);
+			}
+				for (int i = 0 ; i < bonus.size();i++){
+				bonus.get(i).translater(0, -5);
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+			
 
 			f.rafraichir();
 		}
@@ -171,9 +195,7 @@ public class Main {
 		}else{
 			f.ajouter(gameover);
 		}
-		
-		
-		
+			
 	}
 
 }
