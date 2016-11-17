@@ -35,6 +35,7 @@ public class Main {
 		int bonusToucheVaisseau = 0; // 0 normal 1:rapide  2:lent
 		boolean bonusVitesse = false;
 		boolean malusVitesse = false;
+		boolean bonusTirVaisseau = false;
 		f.ajouter(fond);
 		int AllEnnemisTouche = 0;
 		int randomennemis = (int) (Math.random() * (20) + 1);
@@ -117,18 +118,29 @@ public class Main {
 
 			// Tir d'un missile Joueur
 			if (clavier.getEspace()) {
-
-				if (freqJoueur > 15) {
+			
+				if (!bonusTirVaisseau && freqJoueur > 15 ) {
 					Tir missileJ = new Tir("./img/missileJ.png",
 							new Point((vaisseau.getA().getX() + vaisseau.getLargeur() / 2),
 									((vaisseau.getB().getY())) + 10),
 							21, 34);
 					munitionJ.add(missileJ);
 					f.ajouter((Dessin) munitionJ.get(indiceMissile));
+				
+					indiceMissile++;
+					freqJoueur = 0;
+				
+				}else if(bonusTirVaisseau && freqJoueur > 5){  //Tir bonus du joueur
+					Tir missileBonusJoueur = new Tir("./img/missileBonus.png",
+							new Point((vaisseau.getA().getX() + vaisseau.getLargeur() / 2),
+									((vaisseau.getB().getY())) + 10),
+							21, 34);
+					munitionJ.add(missileBonusJoueur);
+					f.ajouter((Dessin) munitionJ.get(indiceMissile));
+				
 					indiceMissile++;
 					freqJoueur = 0;
 				}
-
 			}
 
 			// Avancement des missiles Joueur
@@ -200,7 +212,7 @@ public class Main {
 
 			// Apparition bonus vitesse
 			if (freqBonus == 300) {
-				int choixBonus = (int)( Math.random()*2);
+				int choixBonus = (int)( Math.random()*3);
 				System.out.println(choixBonus+"cb");
 				if(choixBonus == 0){
 					Tir missileBonus = new Tir("./img/bonusVitesse.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
@@ -215,6 +227,12 @@ public class Main {
 					f.ajouter(missileMalus);
 					//malusVitesse=true;
 					bonusToucheVaisseau = 2;
+				}else if(choixBonus == 2){
+					Tir bonusTir = new Tir("./img/bonusTir.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
+					bonus.add(bonusTir);
+					f.ajouter(bonusTir);
+					//malusVitesse=true;
+					bonusToucheVaisseau = 3;
 				}
 			}
 			for (int i = 0; i < bonus.size(); i++) {
@@ -231,10 +249,16 @@ public class Main {
 					bonus.remove(bonus.get(i));
 					malusVitesse = true;
 				}
+				else if(bonus.get(i).intersection(vaisseau) && bonusToucheVaisseau == 3){
+					f.supprimer(bonus.get(i));
+					bonus.remove(bonus.get(i));
+					bonusTirVaisseau = true;
+				}
 				// Temps du bonus
 				if (freqBonus == 310) {
 					bonusVitesse = false;
 					malusVitesse = false;
+					bonusTirVaisseau = false;
 					freqBonus = 0;
 				}
 
