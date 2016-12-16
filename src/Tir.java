@@ -10,6 +10,25 @@ import MG2D.geometrie.*;
 
 public class Tir extends Texture{
 	
+	private boolean attaque = false;
+	private boolean sorti = false;
+	
+	public boolean getSorti() {
+		return sorti;
+	}
+
+	public void setSorti(boolean sorti) {
+		this.sorti = sorti;
+	}
+
+	public boolean getAttaque() {
+		return attaque;
+	}
+
+	public void setAttaque(boolean attaque) {
+		this.attaque = attaque;
+	}
+
 	public Tir() {
 		super();
 		// TODO Auto-generated constructor stub
