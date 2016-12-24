@@ -23,7 +23,7 @@ public class Main {
 		Joueur vaisseau = new Joueur("./img/vaisseau.png", new Point(295, 40), 49, 85);
 		ArrayList<Tir> munitionJ = new ArrayList<Tir>();
 		ArrayList<Tir> munitionE = new ArrayList<Tir>();
-		ArrayList<Tir> bonus = new ArrayList<Tir>();
+		ArrayList<Bonus> bonus = new ArrayList<Bonus>();
 		// freqJoueur pour que le joueur ne tire pas de missiles à chaque tour
 		// de
 		// boucle while
@@ -225,20 +225,20 @@ public class Main {
 				int choixBonus = (int)( Math.random()*3);
 				System.out.println(choixBonus+"choix bonus");
 				if(choixBonus == 0){
-					Tir missileBonus = new Tir("./img/bonusVitesse.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
+					Bonus missileBonus = new Bonus("./img/bonusVitesse.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
 					bonus.add(missileBonus);
 					f.ajouter(missileBonus);
 					//bonusVitesse=true;
 					bonusToucheVaisseau = 1;
 				
 				}else if(choixBonus == 1){
-					Tir missileMalus = new Tir("./img/malusVitesse.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
+					Bonus missileMalus = new Bonus("./img/malusVitesse.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
 					bonus.add(missileMalus);
 					f.ajouter(missileMalus);
 					//malusVitesse=true;
 					bonusToucheVaisseau = 2;
 				}else if(choixBonus == 2){
-					Tir bonusTir = new Tir("./img/bonusTir.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
+					Bonus bonusTir = new Bonus("./img/bonusTir.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
 					bonus.add(bonusTir);
 					f.ajouter(bonusTir);
 					//malusVitesse=true;
