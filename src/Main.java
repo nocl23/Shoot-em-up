@@ -19,55 +19,58 @@ public class Main {
 		f.addMouseMotionListener(souris);
 
 		// valeurs amenées à changer en fonction du mode
-		Rectangle fond = new Rectangle(Couleur.BLANC, new Point(0, 0), 1000, 700, true);
+		Texture fond = new Texture("./img/fond.png", new Point(0, 0), 1000, 700);
 		Joueur vaisseau = new Joueur("./img/vaisseau.png", new Point(295, 40), 49, 85);
 		ArrayList<Tir> munitionJ = new ArrayList<Tir>();
 		ArrayList<Tir> munitionE = new ArrayList<Tir>();
 		ArrayList<Bonus> bonus = new ArrayList<Bonus>();
-		// freqJoueur pour que le joueur ne tire pas de missiles à chaque tour
-		// de
-		// boucle while
+		
+		// Fréquence des tirs du joueur
 		int freqJoueur = 0;
 		int freqEnnemi = 0;
 		int freqBonus = 0;
-		boolean touche = false;
-		int bonusToucheVaisseau = 0; // 0 normal 1:rapide  2:lent
+		// Sert a identifier le bonus qui touche le vaisseau
+		int bonusToucheVaisseau = 0; 
+		// 3 bonus différents
 		boolean bonusVitesse = false;
 		boolean malusVitesse = false;
 		boolean bonusTirVaisseau = false;
+		
 		f.ajouter(fond);
+		// Compteur d'ennemis touchés par le vaisseau
 		int AllEnnemisTouche = 0;
+		
+		//Nombre d'ennemis aléatoire à chaque partie
 		int randomennemis = (int) (Math.random() * (20) + 1);
 		Ennemi ennemis[] = new Ennemi[randomennemis];
-		System.out.println(randomennemis+"randomennemis");
-		Texte vieJoueur = new Texte("Vie du joueur: " + vaisseau.getVie(), new Font("tahoma", 12, 12),
+		
+		// Texte affichant la vie du vaisseau (initialement à 5)
+		Texte vieJoueur = new Texte(Couleur.BLANC,"Vie du joueur: " + vaisseau.getVie(), new Font("tahoma", 12, 12),
 				new Point(50, 50));
 		f.ajouter(vieJoueur);
 
 		// Position initiale aléatoire des ennemis
 		int xEnnemi;
-		int yEnnemi = f.getHeight() - 100;
-		//int xAvant=0;
-		for (int i = 0; i < randomennemis; i++) { // creation de 8 ennemis
-													// positionnés aléatoirement
-													// en abscisse
-
+		int yEnnemi = f.getHeight() - 150;
+		
+		/*
+		 * Boucle parcourant tous les ennemis , affiche aléatoirement la moitié sur une ligne et l'autre moitié
+		 * sur la deuxième ligne
+		 */
+		
+		for (int i = 0; i < randomennemis; i++) { 
 			xEnnemi = (int) (Math.random() * (f.getWidth() - 116));
-		//	xAvant=xEnnemi;
-
-			if (i > (randomennemis / 2)) { // Placement de 4 ennemis par ligne
-											// en changant l'ordonnée des 4
-											// derniers ennemis
-				yEnnemi = f.getHeight() - 200;
+			if (i > (randomennemis / 2)) { 	
+				yEnnemi = f.getHeight() - 250;
 			}
-
-			ennemis[i] = (new Ennemi("./img/ennemi.png", new Point(xEnnemi, yEnnemi), 116, 59));
+			ennemis[i] = (new Ennemi("./img/alien.png", new Point(xEnnemi, yEnnemi), 100, 100));
 			f.ajouter(ennemis[i]);
 		}
 
+		// Ajout du vaisseau joueur
 		f.ajouter(vaisseau);
 
-		// boucle tourne si le joueur a encore des vies et si tous les ennemis n
+		// boucl si le joueur a encore des vies et si tous les ennemis n
 		// ont pas ete touches
 		while (true && vaisseau.getVie() > 0 && AllEnnemisTouche < randomennemis) {
 			try {
@@ -76,13 +79,15 @@ public class Main {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
+			// On incrémente les fréquences à chaque tour
 			freqBonus++;
 			freqJoueur++;
 			freqEnnemi++;
+			
 			f.setAffichageFPS(true);
-//******* PROBLEME LIMITE VAISSEAU *****
-			// Déplacement du vaisseau normal
-			if (bonusVitesse) { //si bonusVitesse actif > augmente la vitesse
+
+			// Déplacement du vaisseau si bonus vitesse actif
+			if (bonusVitesse) { 
 				if (clavier.getDroite() && vaisseau.getB().getX() < f.getWidth()) {
 					vaisseau.translater(20, 0);
 				} else if (clavier.getGauche() && vaisseau.getA().getX() > 0) {
@@ -93,7 +98,8 @@ public class Main {
 					vaisseau.translater(0, -20);
 				}
 			}
-			else if (malusVitesse) { //si malusVitesse actif > reduit la vitesse
+			// Déplacement du vaisseau si malus vitesse
+			else if (malusVitesse) { 
 				if (clavier.getDroite() && vaisseau.getB().getX() < f.getWidth()) {
 					vaisseau.translater(4, 0);
 				} else if (clavier.getGauche() && vaisseau.getA().getX() > 0) {
@@ -103,7 +109,8 @@ public class Main {
 				} else if (clavier.getBas() && vaisseau.getB().getY() > vaisseau.getHauteur()) {
 					vaisseau.translater(0, -4);
 				}
-			}else if (clavier.getDroite() && vaisseau.getB().getX() < f.getWidth()) { //sinon vitesse normal
+				// Sinon vitesse normale
+			}else if (clavier.getDroite() && vaisseau.getB().getX() < f.getWidth()) { 
 				vaisseau.translater(8, 0);
 			} else if (clavier.getGauche() && vaisseau.getA().getX() > 0) {
 				vaisseau.translater(-8, 0);
@@ -116,20 +123,19 @@ public class Main {
 
 			// Tir d'un missile Joueur
 			if (clavier.getEspace()) {
-			
+			// Tir sans bonus Tir , fréquence "normale"
 				if (!bonusTirVaisseau && freqJoueur > 15 ) {
 					Tir missileJ = new Tir("./img/missileJ.png",
 							new Point((vaisseau.getA().getX() + vaisseau.getLargeur() / 2),
 									((vaisseau.getB().getY())) + 10),
 							21, 34);
 					munitionJ.add(missileJ);
-					//System.out.println(indiceMissile+" indice du missile ajouté");
-					//f.ajouter((Dessin) munitionJ.get(indiceMissile));
 				    f.ajouter(missileJ);
 					freqJoueur = 0;
 				
 				}
-				else if(bonusTirVaisseau && freqJoueur > 5){  //Tir bonus du joueur
+				// Tir avec bonus Tir, augmente la fréquence des tirs >> réduction de la fréquence de tir
+				else if(bonusTirVaisseau && freqJoueur > 5){  
 					Tir missileBonusJoueur = new Tir("./img/missileBonus.png",
 							new Point((vaisseau.getA().getX() + vaisseau.getLargeur() / 2),
 									((vaisseau.getB().getY())) + 10),
@@ -145,31 +151,31 @@ public class Main {
 			// Avancement des missiles Joueur + collisions ennemis
 			
 			for (int indexMunitionJ = 0; indexMunitionJ < munitionJ.size(); indexMunitionJ++) {
-				System.out.println(munitionJ.size() + "munition size");
 				munitionJ.get(indexMunitionJ).translater(0, 15);
+				
+				// Parcours des ennemis 
 				for (int ennemy = 0; ennemy < ennemis.length; ennemy++) {
-					if(munitionJ.get(indexMunitionJ).getA().getY()<f.getHeight()){
-						
+					// Si le tir du joueur est encore dans la fenêtre
+					if(munitionJ.get(indexMunitionJ).getA().getY() < f.getHeight()){
+						//Si c'est un Tir qui n'a encore touché aucun ennemi et qu'il touche un ennemi pas encore touché
 						if (munitionJ.get(indexMunitionJ).intersection(ennemis[ennemy])
 								&& !munitionJ.get(indexMunitionJ).getAttaque() && !ennemis[ennemy].getEnnemiTouche()) {
 							ennemis[ennemy].setEnnemiTouche(true);
 							
+							// On supprime l'ennemi et le Tir
 							f.supprimer(ennemis[ennemy]);
-							System.out.println(munitionJ.size()+"size");
 							f.supprimer(munitionJ.get(indexMunitionJ));
 							
+							// La munition a attaqué un ennemi, elle ne pourra plus toucher d'autres ennemis
 							munitionJ.get(indexMunitionJ).setAttaque(true);
-							System.out.println(munitionJ.size()+"size");
 							
-							
+							// Incrémentation du compteur d'ennemis touchés
 							AllEnnemisTouche++;
 						}
 					}
 				}
 			}
 			
-			
-			// System.out.println(AllEnnemisTouche+" ennemi touche");
 			// Déplacement des ennemis de droite à gauche
 			for (int i = 0; i < ennemis.length; i++) {
 
@@ -192,9 +198,12 @@ public class Main {
 
 			// Tir aléatoire des ennemis
 			if (freqEnnemi == 60) {
+				// Réinitialisation de la fréquence
 				freqEnnemi = 0;
+				// Choix aléatoire du vaisseau ennemi
 				int numeroVaisseau = (int) (Math.random() * randomennemis);
-				// System.out.println(numeroVaisseau + "numero vaisseau");
+				
+				// Vérification si l'ennemi existe encore, si oui Tir autorisé
 				if (!ennemis[numeroVaisseau].getEnnemiTouche()) {
 					Tir missileE = new Tir("./img/missileE.png", new Point((ennemis[numeroVaisseau].getB().getX() - 45),
 							((ennemis[numeroVaisseau].getB().getY()) - 100)), 21, 34);
@@ -202,54 +211,60 @@ public class Main {
 					f.ajouter(missileE);
 				}
 			}
+			
 			// Avancement des missiles ennemis
 			for (int i = 0; i < munitionE.size(); i++) {
 				munitionE.get(i).translater(0, -5);
 
 				// Collisions missiles ennemis sur Joueur
-				if (munitionE.get(i).intersection(vaisseau) && !touche) {
-					touche = true;
+				if (munitionE.get(i).intersection(vaisseau) && !vaisseau.getTouche()) {
+					
+					vaisseau.setTouche(true);
+					//Décrémente une vie
 					vaisseau.setVie(vaisseau.getVie() - 1);
+					// Mise à jour de l'affichage
 					vieJoueur.setTexte("Vie du joueur: " + vaisseau.getVie());
 					f.supprimer(munitionE.get(i));
 					munitionE.remove(munitionE.get(i));
 					System.out.println(vaisseau.getVie()+"Vie");
-					touche = false;
-
+					vaisseau.setTouche(false);
 				}
-
 			}
 
-			// Apparition bonus vitesse
+			// Apparition bonus à chaque fois frequence = 300
 			if (freqBonus == 300) {
+				// Choix random du bonus
 				int choixBonus = (int)( Math.random()*3);
-				System.out.println(choixBonus+"choix bonus");
+			
 				if(choixBonus == 0){
 					Bonus missileBonus = new Bonus("./img/bonusVitesse.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
 					bonus.add(missileBonus);
 					f.ajouter(missileBonus);
-					//bonusVitesse=true;
+					
 					bonusToucheVaisseau = 1;
 				
 				}else if(choixBonus == 1){
 					Bonus missileMalus = new Bonus("./img/malusVitesse.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
 					bonus.add(missileMalus);
 					f.ajouter(missileMalus);
-					//malusVitesse=true;
+					
 					bonusToucheVaisseau = 2;
+					
 				}else if(choixBonus == 2){
 					Bonus bonusTir = new Bonus("./img/bonusTir.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
 					bonus.add(bonusTir);
 					f.ajouter(bonusTir);
-					//malusVitesse=true;
+					
 					bonusToucheVaisseau = 3;
 				}
 			}
+			
+			//Translation du bonus
 			for (int i = 0; i < bonus.size(); i++) {
 				bonus.get(i).translater(0, -5);
-
+				// Différenciation des bonus que le joueur attrape
+				
 				if (bonus.get(i).intersection(vaisseau) && bonusToucheVaisseau == 1) {
-					// System.out.println("freqBonus avant "+freqBonus);
 					f.supprimer(bonus.get(i));
 					bonus.remove(bonus.get(i));
 					bonusVitesse = true;

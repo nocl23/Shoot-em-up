@@ -7,6 +7,17 @@ import MG2D.geometrie.*;
 public class Joueur extends Texture {
 	
 	private int vie=5;
+	boolean touche = false;
+
+
+	public boolean getTouche() {
+		return touche;
+	}
+
+
+	public void setTouche(boolean touche) {
+		this.touche = touche;
+	}
 
 
 	public void setVie(int vie) {
