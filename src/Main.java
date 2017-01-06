@@ -9,15 +9,16 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Fenetre f = new Fenetre("Shoot'em Up", 1000, 650);
+		Fenetre f = new Fenetre("Shoot'em Up", 700, 650);
 		Clavier clavier = new Clavier();
+		Clavier clav = new Clavier();
 		Souris souris = new Souris(480);
 		f.addKeyListener(clavier);
 		f.addMouseListener(souris);
 		f.getP().addMouseListener(souris);
 		f.getP().addMouseMotionListener(souris);
 		f.addMouseMotionListener(souris);
-
+	
 		// valeurs amenées à changer en fonction du mode
 		Texture fond = new Texture("./img/fond.png", new Point(0, 0), 1000, 700);
 		Joueur vaisseau = new Joueur("./img/vaisseau.png", new Point(295, 40), 49, 85);
@@ -29,8 +30,10 @@ public class Main {
 		int freqJoueur = 0;
 		int freqEnnemi = 0;
 		int freqBonus = 0;
+		
 		// Sert a identifier le bonus qui touche le vaisseau
 		int bonusToucheVaisseau = 0; 
+		
 		// 3 bonus différents
 		boolean bonusVitesse = false;
 		boolean malusVitesse = false;
@@ -42,13 +45,9 @@ public class Main {
 		
 		//Nombre d'ennemis aléatoire à chaque partie
 		int randomennemis = (int) (Math.random() * (20) + 1);
+		System.out.println(randomennemis);
 		Ennemi ennemis[] = new Ennemi[randomennemis];
-		
-		// Texte affichant la vie du vaisseau (initialement à 5)
-		Texte vieJoueur = new Texte(Couleur.BLANC,"Vie du joueur: " + vaisseau.getVie(), new Font("tahoma", 12, 12),
-				new Point(50, 50));
-		f.ajouter(vieJoueur);
-
+	
 		// Position initiale aléatoire des ennemis
 		int xEnnemi;
 		int yEnnemi = f.getHeight() - 150;
@@ -69,7 +68,17 @@ public class Main {
 
 		// Ajout du vaisseau joueur
 		f.ajouter(vaisseau);
-
+		
+		Rectangle contourJauge = new Rectangle(Couleur.JAUNE, new Point(10,10),100,35);
+		Rectangle jauge = new Rectangle(Couleur.VERT, new Point(10,10), 100, 35,true);
+		f.ajouter(jauge);
+		f.ajouter(contourJauge);
+		
+		/* Texte affichant la vie du vaisseau (initialement à 5)
+				Texte vieJoueur = new Texte(Couleur.BLANC,"" + vaisseau.getVie(), new Font("tahoma", 12, 12),
+						new Point(50, 50));
+				f.ajouter(vieJoueur);*/
+		
 		// boucl si le joueur a encore des vies et si tous les ennemis n
 		// ont pas ete touches
 		while (true && vaisseau.getVie() > 0 && AllEnnemisTouche < randomennemis) {
@@ -223,10 +232,18 @@ public class Main {
 					//Décrémente une vie
 					vaisseau.setVie(vaisseau.getVie() - 1);
 					// Mise à jour de l'affichage
-					vieJoueur.setTexte("Vie du joueur: " + vaisseau.getVie());
+			//		vieJoueur.setTexte("" + vaisseau.getVie());
+					jauge.setLargeur(jauge.getLargeur()-20);
+					
+					if(vaisseau.getVie() == 2){
+						jauge.setCouleur(Couleur.ORANGE);
+					}else if(vaisseau.getVie() == 1){
+						jauge.setCouleur(Couleur.ROUGE);
+					}
+					
 					f.supprimer(munitionE.get(i));
 					munitionE.remove(munitionE.get(i));
-					System.out.println(vaisseau.getVie()+"Vie");
+					//System.out.println(vaisseau.getVie()+"Vie");
 					vaisseau.setTouche(false);
 				}
 			}
@@ -286,23 +303,25 @@ public class Main {
 					bonusTirVaisseau = false;
 					freqBonus = 0;
 				}
-
 			}
 
 			f.rafraichir();
 		}
-
+		
 		// Affichage ecran de fin de jeu
-		Rectangle fondGO = new Rectangle(Couleur.NOIR, new Point(0, 0), 1000, 700, true);
-		Texte gameover = new Texte(Couleur.BLANC, "GAME OVER", new Font("tahoma", 120, 120), new Point(500, 300));
-		Texte ennemiLoose = new Texte(Couleur.BLANC, "YOU WIN", new Font("tahoma", 120, 120), new Point(500, 300));
-		f.ajouter(fondGO);
+		Texture fin = new Texture("./img/accueil.jpg", new Point(0, 0), 700, 700);
+		Texte gameover = new Texte(Couleur.BLANC, "GAME OVER tu n'as pas réussi ta mission...", new Font("tahoma", 30, 30), new Point(350, 400));
+		Texte ennemiLoose = new Texte(Couleur.BLANC, "BRAVO petit padawan", new Font("tahoma", 40, 40), new Point(350, 300));
+		f.ajouter(fin);
 		if (vaisseau.getVie() > 0) {
 			f.ajouter(ennemiLoose);
 		} else {
 			f.ajouter(gameover);
+			int ennemies = randomennemis - AllEnnemisTouche;
+			Texte stats = new Texte(Couleur.BLANC, "Il restait encore "+ ennemies + " ennemis à tuer!", new Font("tahoma", 30, 30), new Point(350, 300));
+			f.ajouter(stats);
 		}
-
+	
 	}
 
 }
