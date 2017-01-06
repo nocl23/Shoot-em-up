@@ -11,14 +11,13 @@ public class Main {
 
 		Fenetre f = new Fenetre("Shoot'em Up", 700, 650);
 		Clavier clavier = new Clavier();
-		Clavier clav = new Clavier();
 		Souris souris = new Souris(480);
 		f.addKeyListener(clavier);
 		f.addMouseListener(souris);
 		f.getP().addMouseListener(souris);
 		f.getP().addMouseMotionListener(souris);
 		f.addMouseMotionListener(souris);
-	
+		
 		// valeurs amenées à changer en fonction du mode
 		Texture fond = new Texture("./img/fond.png", new Point(0, 0), 1000, 700);
 		Joueur vaisseau = new Joueur("./img/vaisseau.png", new Point(295, 40), 49, 85);
@@ -31,9 +30,8 @@ public class Main {
 		int freqEnnemi = 0;
 		int freqBonus = 0;
 		
-		// Sert a identifier le bonus qui touche le vaisseau
-		int bonusToucheVaisseau = 0; 
-		
+		//Savoir quel bonus touche le vaisseau
+		int bonusToucheVaisseau = 0;
 		// 3 bonus différents
 		boolean bonusVitesse = false;
 		boolean malusVitesse = false;
@@ -45,7 +43,7 @@ public class Main {
 		
 		//Nombre d'ennemis aléatoire à chaque partie
 		int randomennemis = (int) (Math.random() * (20) + 1);
-		System.out.println(randomennemis);
+		
 		Ennemi ennemis[] = new Ennemi[randomennemis];
 	
 		// Position initiale aléatoire des ennemis
@@ -252,27 +250,31 @@ public class Main {
 			if (freqBonus == 300) {
 				// Choix random du bonus
 				int choixBonus = (int)( Math.random()*3);
-			
-				if(choixBonus == 0){
+				
+				switch(choixBonus){
+				case 0:
 					Bonus missileBonus = new Bonus("./img/bonusVitesse.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
 					bonus.add(missileBonus);
 					f.ajouter(missileBonus);
 					
 					bonusToucheVaisseau = 1;
-				
-				}else if(choixBonus == 1){
+					break;
+					
+				case 1:
 					Bonus missileMalus = new Bonus("./img/malusVitesse.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
 					bonus.add(missileMalus);
 					f.ajouter(missileMalus);
 					
 					bonusToucheVaisseau = 2;
+					break;
 					
-				}else if(choixBonus == 2){
+				case 2:
 					Bonus bonusTir = new Bonus("./img/bonusTir.png", new Point((int) (Math.random() * 1000), 600), 21, 34);
 					bonus.add(bonusTir);
 					f.ajouter(bonusTir);
 					
 					bonusToucheVaisseau = 3;
+					break;
 				}
 			}
 			
